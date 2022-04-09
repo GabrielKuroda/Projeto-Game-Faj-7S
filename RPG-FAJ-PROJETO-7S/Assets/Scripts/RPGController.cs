@@ -5,7 +5,7 @@ using UnityEngine;
 public class RPGController : MonoBehaviour
 {
 
-    public float speed = 5f;
+    public float speed = 10f;
 
     private Rigidbody2D _rigidbody;
     private SpriteRenderer _spriteRenderer;
