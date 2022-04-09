@@ -19,7 +19,7 @@ public class CameraController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        target = RPGController.instance.transform;
+        target = RPGController.Instance.transform;
 
         halfHeight = Camera.main.orthographicSize;
         halfWidth = halfHeight * Camera.main.aspect;
@@ -27,7 +27,7 @@ public class CameraController : MonoBehaviour
         bottomLeftLimit = theMap.localBounds.min + new Vector3(halfWidth, halfHeight, 0f);
         topRightLimit = theMap.localBounds.max + new Vector3(-halfWidth, -halfHeight, 0f);
 
-        RPGController.instance.SetBounds(theMap.localBounds.min, theMap.localBounds.max);
+        RPGController.Instance.SetBounds(theMap.localBounds.min, theMap.localBounds.max);
     }
 
     // LateUpdate is called once per frame after Update
