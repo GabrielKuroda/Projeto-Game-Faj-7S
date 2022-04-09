@@ -18,6 +18,8 @@ public class RPGController : IPersistentSingleton<RPGController>
     public Vector3 bottomLeftLimit;
     public Vector3 topRightLimit;
 
+    public string areaTransitionName;
+
     // Start is called before the first frame update
     void Start()
     {

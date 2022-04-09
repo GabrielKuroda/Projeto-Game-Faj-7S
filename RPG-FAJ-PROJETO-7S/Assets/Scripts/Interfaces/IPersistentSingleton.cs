@@ -21,6 +21,7 @@ public abstract class IPersistentSingleton<T> : MonoBehaviour where T : MonoBeha
                 DestroyImmediate(value.gameObject);
                 Debug.LogWarning("Singleton duplicado destruido!!");
             }
+
         }
     }
 

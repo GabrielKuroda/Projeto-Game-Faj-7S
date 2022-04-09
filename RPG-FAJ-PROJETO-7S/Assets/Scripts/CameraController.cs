@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class CameraController : MonoBehaviour
 {
 
-    public Transform target;
+    private Transform target;
 
     public Tilemap theMap;
 
