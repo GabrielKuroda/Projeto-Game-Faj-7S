@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RPGController : MonoBehaviour
+public class RPGController : IPersistentSingleton<RPGController>
 {
 
     public float speed = 5f;
@@ -18,31 +18,14 @@ public class RPGController : MonoBehaviour
     public Vector3 bottomLeftLimit;
     public Vector3 topRightLimit;
 
-    public static RPGController instance;
-
-    private void Awake()
-    {
-        _rigidbody = GetComponent<Rigidbody2D>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        _animator = GetComponent<Animator>();
-    }
+    public string areaTransitionName;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            if (instance != this)
-            {
-                Destroy(gameObject);
-            }
-        }
-
-        DontDestroyOnLoad(gameObject);
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
