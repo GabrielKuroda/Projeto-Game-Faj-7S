@@ -13,6 +13,7 @@ public class AreaEntrance : MonoBehaviour
         {
             RPGController.Instance.transform.position = transform.position;
         }
+        UIFade.Instance.FadeFromBlack();
 
     }
 
