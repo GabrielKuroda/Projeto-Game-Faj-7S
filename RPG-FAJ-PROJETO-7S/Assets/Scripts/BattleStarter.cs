@@ -26,6 +26,7 @@ public class BattleStarter : MonoBehaviour
             {
                 betweenBattleCounter = Random.Range(timeBetweenBattles * .5f, timeBetweenBattles * 1.5f);
                 Debug.Log("Iniciou batalha");
+                StartCoroutine(StartBattleCo());
             }
         }
     }
@@ -44,5 +45,13 @@ public class BattleStarter : MonoBehaviour
         {
             inArea = false;
         }
+    }
+
+    public IEnumerator StartBattleCo()
+    {
+        UIFade.Instance.FadeToBlack();
+        int selectedBattle = Random.Range(0, potentialBattles.Length);
+        yield return new WaitForSeconds(1.5f);
+        UIFade.Instance.FadeFromBlack();
     }
 }

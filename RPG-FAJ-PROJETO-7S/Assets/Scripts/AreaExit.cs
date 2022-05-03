@@ -33,6 +33,7 @@ public class AreaExit : MonoBehaviour
         {
             shouldLoad = true;
             RPGController.Instance.areaTransitionName = areaTransitionName;
+            UIFade.Instance.FadeToBlack();
         }
     }
 }
