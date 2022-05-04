@@ -20,28 +20,35 @@ public class RPGController : IPersistentSingleton<RPGController>
 
     public string areaTransitionName;
 
+    public bool canMove = true;
+
     // Start is called before the first frame update
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
+
+        DontDestroyOnLoad(gameObject);
     }
 
     // Update is called once per frame
     void Update()
     {
-        float inputX = Input.GetAxisRaw("Horizontal");
-    
-        float inputY = Input.GetAxisRaw("Vertical");
- 
-        _movement = new Vector2(inputX, inputY) * speed;
-        if(_movement.sqrMagnitude > 0.1f)
+        if (canMove)
         {
-            _spriteRenderer.flipX = (inputX > 0.1f);
+            float inputX = Input.GetAxisRaw("Horizontal");
+
+            float inputY = Input.GetAxisRaw("Vertical");
+
+            _movement = new Vector2(inputX, inputY) * speed;
+            if (_movement.sqrMagnitude > 0.1f)
+            {
+                _spriteRenderer.flipX = (inputX > 0.1f);
+            }
+            _animator.SetFloat(InputXHash, _movement.x);
+            _animator.SetFloat(InputYHash, _movement.y);
         }
-        _animator.SetFloat(InputXHash, _movement.x);
-        _animator.SetFloat(InputYHash, _movement.y);
     }
 
     private void FixedUpdate()
