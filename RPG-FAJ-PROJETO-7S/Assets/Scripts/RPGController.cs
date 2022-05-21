@@ -49,6 +49,10 @@ public class RPGController : IPersistentSingleton<RPGController>
             _animator.SetFloat(InputXHash, _movement.x);
             _animator.SetFloat(InputYHash, _movement.y);
         }
+        else
+        {
+            _rigidbody.velocity = Vector2.zero;
+        }
     }
 
     private void FixedUpdate()
