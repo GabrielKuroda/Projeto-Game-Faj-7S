@@ -35,6 +35,7 @@ public class RPGController : IPersistentSingleton<RPGController>
     // Update is called once per frame
     void Update()
     {
+
         if (canMove)
         {
             float inputX = Input.GetAxisRaw("Horizontal");

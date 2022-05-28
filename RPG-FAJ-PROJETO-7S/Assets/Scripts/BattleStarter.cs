@@ -52,8 +52,7 @@ public class BattleStarter : MonoBehaviour
         UIFade.Instance.FadeToBlack();
         int selectedBattle = Random.Range(0, potentialBattles.Length);
         yield return new WaitForSeconds(1.5f);
+        BattleManager.Instance.BattleStart(potentialBattles[selectedBattle].enemies);
         UIFade.Instance.FadeFromBlack();
-        BattleManager.Instance.BattleStart();
-        
     }
 }
