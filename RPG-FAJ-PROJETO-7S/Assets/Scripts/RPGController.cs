@@ -35,6 +35,7 @@ public class RPGController : IPersistentSingleton<RPGController>
     // Update is called once per frame
     void Update()
     {
+
         if (canMove)
         {
             float inputX = Input.GetAxisRaw("Horizontal");
@@ -48,6 +49,10 @@ public class RPGController : IPersistentSingleton<RPGController>
             }
             _animator.SetFloat(InputXHash, _movement.x);
             _animator.SetFloat(InputYHash, _movement.y);
+        }
+        else
+        {
+            _rigidbody.velocity = Vector2.zero;
         }
     }
 

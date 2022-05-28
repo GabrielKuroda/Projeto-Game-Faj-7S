@@ -25,7 +25,7 @@ public class BattleStarter : MonoBehaviour
             if(betweenBattleCounter <= 0)
             {
                 betweenBattleCounter = Random.Range(timeBetweenBattles * .5f, timeBetweenBattles * 1.5f);
-                Debug.Log("Iniciou batalha");
+                
                 StartCoroutine(StartBattleCo());
             }
         }
@@ -52,6 +52,7 @@ public class BattleStarter : MonoBehaviour
         UIFade.Instance.FadeToBlack();
         int selectedBattle = Random.Range(0, potentialBattles.Length);
         yield return new WaitForSeconds(1.5f);
+        BattleManager.Instance.BattleStart(potentialBattles[selectedBattle].enemies);
         UIFade.Instance.FadeFromBlack();
     }
 }
