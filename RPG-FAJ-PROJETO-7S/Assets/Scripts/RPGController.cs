@@ -42,6 +42,7 @@ public class RPGController : IPersistentSingleton<RPGController>
 
             float inputY = Input.GetAxisRaw("Vertical");
 
+            
             _movement = new Vector2(inputX, inputY) * speed;
             if (_movement.sqrMagnitude > 0.1f)
             {
@@ -58,20 +59,14 @@ public class RPGController : IPersistentSingleton<RPGController>
 
     private void FixedUpdate()
     {
-        if (_movement.sqrMagnitude > 0.01f)
+        if (canMove)
         {
-            Vector2 velocity = _movement.normalized * speed;
-            _rigidbody.velocity = velocity;
-        }
-        else
-        {
-            _rigidbody.velocity = Vector2.zero;
-        }
+            _rigidbody.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * speed;
 
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, bottomLeftLimit.x, topRightLimit.x),
-                                         Mathf.Clamp(transform.position.y, bottomLeftLimit.y, topRightLimit.y),
-                                         transform.position.z);
-
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, bottomLeftLimit.x, topRightLimit.x),
+                                             Mathf.Clamp(transform.position.y, bottomLeftLimit.y, topRightLimit.y),
+                                             transform.position.z);
+        }
     }
 
     public void SetBounds(Vector3 botLeft, Vector3 topRight)
