@@ -18,7 +18,7 @@ public class BattleStarter : MonoBehaviour
     void Update()
     {
         if(inArea){
-            if(Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0){
+            if(RPGController.Instance.canMove){
                 betweenBattleCounter -= Time.deltaTime;
             }
 
