@@ -8,7 +8,7 @@ public class RPGController : IPersistentSingleton<RPGController>
     public float speed = 5f;
 
     private Rigidbody2D _rigidbody;
-    private SpriteRenderer _spriteRenderer;
+    public SpriteRenderer _spriteRenderer;
     private Animator _animator;
 
     private Vector2 _movement = Vector2.zero;
@@ -20,6 +20,10 @@ public class RPGController : IPersistentSingleton<RPGController>
 
     public string areaTransitionName;
 
+    public AINpc npc;
+
+    private bool isTriggerNpc = false;
+
     public bool canMove = true;
 
     // Start is called before the first frame update
@@ -28,6 +32,8 @@ public class RPGController : IPersistentSingleton<RPGController>
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
+
+        npc = FindObjectOfType(typeof(AINpc)) as AINpc;
 
         DontDestroyOnLoad(gameObject);
     }
@@ -55,6 +61,11 @@ public class RPGController : IPersistentSingleton<RPGController>
         {
             _rigidbody.velocity = Vector2.zero;
         }
+        if(Input.GetKeyDown(KeyCode.F) && isTriggerNpc == true)
+        {
+            npc.isIdle = false;
+        }
+
     }
 
     private void FixedUpdate()
@@ -73,6 +84,29 @@ public class RPGController : IPersistentSingleton<RPGController>
     {
         bottomLeftLimit = botLeft + new Vector3(.5f, 1f, 0f);
         topRightLimit = topRight + new Vector3(-.5f, -1f, 0f);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        switch (other.tag)
+        {
+            case "Npc":
+                isTriggerNpc = true;
+                break;
+        }
+
+
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        switch (collision.tag)
+        {
+            case "Npc":
+                isTriggerNpc = false;
+                npc.isIdle = true;
+                break;
+        }
     }
 
 }
