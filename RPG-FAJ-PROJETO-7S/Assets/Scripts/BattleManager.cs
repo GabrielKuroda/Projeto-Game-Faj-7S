@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleManager : IPersistentSingleton<BattleManager>
 {
@@ -19,7 +20,11 @@ public class BattleManager : IPersistentSingleton<BattleManager>
     public BattleChar playerPrefabs;
     public BattleChar[] enemyPrefabs;
 
-    public List<BattleChar> activeBattlers = new List<BattleChar>();
+    public List<BattleChar> activeBattlers;
+
+    public Text playerHpText;
+
+    public int currentEnemy;
 
     // Start is called before the first frame update
     void Start()
@@ -30,13 +35,17 @@ public class BattleManager : IPersistentSingleton<BattleManager>
     // Update is called once per frame
     void Update()
     {
-
+        if (!isPlayerTurn())
+        {
+            enemyTurn();
+        }
     }
 
     public void BattleStart(string[] enemiesToSpaw)
     {
         if (!battleActive)
         {
+            activeBattlers = new List<BattleChar>();
             battleActive = true;
             RPGController.Instance.canMove = false;
 
@@ -64,7 +73,8 @@ public class BattleManager : IPersistentSingleton<BattleManager>
                     }
                 }
             }
-
+            UpdateUIStats();
+            currentEnemy = 0;
             turnWaiting = true;
             currentTurn = 0;
         }
@@ -72,14 +82,33 @@ public class BattleManager : IPersistentSingleton<BattleManager>
 
     public void Flee()
     {
-        int fleeSuccess = Random.Range(0, 100);
-        if (fleeSuccess < chanceToFlee)
-        {
-            StartCoroutine(EndBattleCo());
+        if (isPlayerTurn()) {
+            int fleeSuccess = Random.Range(0, 100);
+            if (fleeSuccess < chanceToFlee)
+            {
+                StartCoroutine(EndBattleCo());
+            }
+            else
+            {
+                Debug.Log("Não pode escapar da batalha");
+                currentTurn++;
+            }
         }
         else
         {
-            Debug.Log("Não pode escapar da batalha");
+            Debug.Log("Não é o seu turno");
+        }
+    }
+
+    public void Attack()
+    {
+        if (isPlayerTurn())
+        {
+            DealDamage(1);
+        }
+        else
+        {
+            Debug.Log("Não é o seu turno");
         }
     }
 
@@ -94,4 +123,66 @@ public class BattleManager : IPersistentSingleton<BattleManager>
         currentTurn = 0;
         RPGController.Instance.canMove = true;
     }
+    public void enemyTurn()
+    {
+        for(int i = 1; i < activeBattlers.Count; i++)
+        {
+            //StartCoroutine(EnemyAttack());
+            DealDamage(0);
+        }
+        currentTurn = 0;
+    }
+    public IEnumerator EnemyAttack()
+    {
+        
+        yield return new WaitForSeconds(1f);
+        DealDamage(0);
+    }
+
+    public void DealDamage(int target)
+    {
+        float atkPwr = activeBattlers[currentTurn].strength;
+        float defPwr = activeBattlers[target].defence;
+
+
+        float damageCalc = (atkPwr / defPwr) * Random.Range(.9f, 1.1f);
+        int damageToGive = Mathf.RoundToInt(damageCalc);
+        Debug.Log(activeBattlers[currentTurn].charName + " is dealing " + damageCalc + "(" + damageToGive + ") damage to " + activeBattlers[target].charName);
+        activeBattlers[target].currentHp -= damageToGive;
+        currentTurn++;
+        //Instantiate(theDamageNumber, activeBattlers[target].transform.position, activeBattlers[target].transform.rotation).SetDamage(damageToGive);
+        UpdateUIStats();
+        ValidateIsDead();
+    }
+
+    public bool isPlayerTurn()
+    {
+        return currentTurn % 2 == 0;
+    }
+    public void UpdateUIStats()
+    {
+        playerHpText.text = activeBattlers[0].currentHp.ToString() + "/" + activeBattlers[0].maxHp.ToString();
+    }
+
+    public void ValidateIsDead()
+    {
+        if (activeBattlers[0].currentHp <= 0)
+        {
+            Debug.Log("Você morreu");
+            StartCoroutine(EndBattleCo());
+        }
+        if(activeBattlers[1].currentHp <= 0)
+        {
+            Debug.Log("Você matou um inimigo");
+            Destroy(enemyPosition[currentEnemy].GetChild(1).gameObject);
+            activeBattlers.RemoveAt(1);
+            currentEnemy++;
+        }
+        if (activeBattlers.Count == 1)
+        {
+            Debug.Log("Você venceu a batalha");
+            StartCoroutine(EndBattleCo());
+        }
+    }
+
 }

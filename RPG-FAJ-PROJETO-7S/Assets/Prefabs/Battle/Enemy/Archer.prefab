@@ -103,5 +103,5 @@ MonoBehaviour:
   maxHp: 150
   currentMp: 30
   maxMp: 30
-  defence: 0
-  strength: 0
+  defence: 10
+  strength: 20
