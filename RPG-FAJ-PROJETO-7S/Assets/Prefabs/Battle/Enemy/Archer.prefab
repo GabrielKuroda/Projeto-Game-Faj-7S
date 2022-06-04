@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1690610005638043983}
   - component: {fileID: 7466813991932109287}
   - component: {fileID: 7841383676833140892}
+  - component: {fileID: 8757201126733158059}
   m_Layer: 0
   m_Name: Archer
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 136290787224912047}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -7.3076324}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.7238, y: 1.8225, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -99,9 +100,30 @@ MonoBehaviour:
   hasDied: 0
   charName: Archer
   movesAvailable: []
-  currentHp: 150
-  maxHp: 150
+  currentHp: 100
+  maxHp: 100
   currentMp: 30
   maxMp: 30
-  defence: 10
+  defence: 2
   strength: 20
+  fadSpeed: 1
+  theSprite: {fileID: 7466813991932109287}
+--- !u!95 &8757201126733158059
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 136290787224912047}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 74ee8a074edb8d74f81b42dd3ea0317c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
