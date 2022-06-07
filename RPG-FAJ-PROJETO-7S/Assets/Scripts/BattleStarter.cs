@@ -17,7 +17,7 @@ public class BattleStarter : MonoBehaviour
 
     void Update()
     {
-        if(inArea){
+        if(inArea && Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0){
             if(RPGController.Instance.canMove){
                 betweenBattleCounter -= Time.deltaTime;
             }
@@ -25,7 +25,7 @@ public class BattleStarter : MonoBehaviour
             if(betweenBattleCounter <= 0)
             {
                 betweenBattleCounter = Random.Range(timeBetweenBattles * .5f, timeBetweenBattles * 1.5f);
-                
+                RPGController.Instance.canMove = false;
                 StartCoroutine(StartBattleCo());
             }
         }
