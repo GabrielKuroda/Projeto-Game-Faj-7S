@@ -8,8 +8,10 @@ public class GameManager : IPersistentSingleton<GameManager>
 {
 
     public Action<string> OnLoadedSceneComplete;
-
     private string _currentScene;
+    public string[] itensHeld;
+    public int[] numbOfItens;
+    public Item[] refereceItems;
 
     // Start is called before the first frame update
     void Start()
@@ -40,5 +42,13 @@ public class GameManager : IPersistentSingleton<GameManager>
         OnLoadedSceneComplete?.Invoke(_currentScene);
     }
 
+    public Item GetItemDetails(string itemToGrab){
+        for(int i = 0; i < refereceItems.Length;i++){
+            if(refereceItems[i].itemName == itemToGrab){
+                return refereceItems[i];
+            }
+        }
+        return null;
+    }
 
 }
