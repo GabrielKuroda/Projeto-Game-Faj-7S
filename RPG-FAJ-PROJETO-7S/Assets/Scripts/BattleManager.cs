@@ -1,17 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleManager : IPersistentSingleton<BattleManager>
 {
 
     private bool battleActive;
+    private bool ableToAct;
     public bool turnWaiting;
 
     public GameObject battleScene;
+    public GameObject uiButtonsHolder;
 
     public int currentTurn;
     public int chanceToFlee = 35;
+    public int currentEnemy;
 
     public Transform playerPositions;
     public Transform[] enemyPosition;
@@ -19,7 +23,15 @@ public class BattleManager : IPersistentSingleton<BattleManager>
     public BattleChar playerPrefabs;
     public BattleChar[] enemyPrefabs;
 
-    public List<BattleChar> activeBattlers = new List<BattleChar>();
+    public DamageNumber damageNumber;
+
+    public List<BattleChar> activeBattlers;
+
+    public Text playerNameText;
+    public Text playerHpText;
+    public Text playerMpText;
+
+    private Animator playerAnimator;
 
     // Start is called before the first frame update
     void Start()
@@ -27,16 +39,37 @@ public class BattleManager : IPersistentSingleton<BattleManager>
         DontDestroyOnLoad(gameObject);
     }
 
-    // Update is called once per frame
     void Update()
     {
-
+        if (battleActive)
+        {
+            if (turnWaiting)
+            {
+                if (activeBattlers[currentTurn].isPlayer)
+                {
+                    if (ableToAct)
+                    {
+                        uiButtonsHolder.SetActive(true);
+                    }
+                    else
+                    {
+                        uiButtonsHolder.SetActive(false);
+                    }
+                }
+                else
+                {
+                    uiButtonsHolder.SetActive(false);
+                    StartCoroutine(EnemyAttack());
+                }
+            }
+        }
     }
 
     public void BattleStart(string[] enemiesToSpaw)
     {
         if (!battleActive)
         {
+            activeBattlers = new List<BattleChar>();
             battleActive = true;
             RPGController.Instance.canMove = false;
 
@@ -47,7 +80,9 @@ public class BattleManager : IPersistentSingleton<BattleManager>
             BattleChar newPlayer = Instantiate(playerPrefabs, playerPositions.position, playerPositions.rotation);
 
             newPlayer.transform.parent = playerPositions;
+            playerAnimator = newPlayer.GetComponent<Animator>();
             activeBattlers.Add(newPlayer);
+            playerNameText.text = activeBattlers[0].charName;
 
             for (int i = 0; i < enemiesToSpaw.Length; i++)
             {
@@ -64,10 +99,25 @@ public class BattleManager : IPersistentSingleton<BattleManager>
                     }
                 }
             }
-
+            UpdateUIStats();
+            ableToAct = true;
+            currentEnemy = 0;
             turnWaiting = true;
             currentTurn = 0;
         }
+    }
+
+    public void NextTurn()
+    {
+        currentTurn++;
+        if (currentTurn >= activeBattlers.Count)
+        {
+            currentTurn = 0;
+            ableToAct = true;
+        }
+        Debug.Log(currentTurn);
+        turnWaiting = true;
+        UpdateUIStats();
     }
 
     public void Flee()
@@ -80,7 +130,45 @@ public class BattleManager : IPersistentSingleton<BattleManager>
         else
         {
             Debug.Log("Não pode escapar da batalha");
+            currentTurn++;
         }
+    }
+
+    public void Attack()
+    {
+        ableToAct = false;
+        StartCoroutine(AttackAnimation());
+    }
+
+    public void Ultimate()
+    {
+        if(activeBattlers[0].currentMp >= 25)
+        {
+            ableToAct = false;
+            activeBattlers[0].currentMp -= 25;
+            StartCoroutine(UltimateAnimation());
+        }
+        else {
+            Debug.Log("Você não tem MP para utilizar a ultimate");
+        }
+    }
+
+    public IEnumerator AttackAnimation()
+    {
+        playerAnimator.SetBool("isAttacking", true);
+        yield return new WaitForSeconds(1f);
+        DealDamage(1);
+        playerAnimator.SetBool("isAttacking", false);
+        NextTurn();
+    }
+
+    public IEnumerator UltimateAnimation()
+    {
+        playerAnimator.SetBool("isUltimate", true);
+        yield return new WaitForSeconds(1f);
+        DealUltimateDamage(1);
+        playerAnimator.SetBool("isUltimate", false);
+        NextTurn();
     }
 
     public IEnumerator EndBattleCo()
@@ -93,5 +181,80 @@ public class BattleManager : IPersistentSingleton<BattleManager>
         UIFade.Instance.FadeFromBlack();
         currentTurn = 0;
         RPGController.Instance.canMove = true;
+        Destroy(activeBattlers[0].gameObject);
     }
+
+    public IEnumerator EnemyAttack()
+    {
+        turnWaiting = false;
+        activeBattlers[currentTurn].GetComponent<Animator>().SetBool("isAttacking", true);
+        yield return new WaitForSeconds(1f);
+        DealDamage(0);
+        activeBattlers[currentTurn].GetComponent<Animator>().SetBool("isAttacking", false);
+        yield return new WaitForSeconds(1f);
+        NextTurn();
+    }
+
+    public void DealDamage(int target)
+    {
+        float atkPwr = activeBattlers[currentTurn].strength;
+        float defPwr = activeBattlers[target].defence;
+
+
+        float damageCalc = (atkPwr / defPwr) * Random.Range(.9f, 1.1f);
+        int damageToGive = Mathf.RoundToInt(damageCalc);
+        Debug.Log(activeBattlers[currentTurn].charName + " is dealing " + damageCalc + "(" + damageToGive + ") damage to " + activeBattlers[target].charName);
+        activeBattlers[target].currentHp -= damageToGive;
+        Instantiate(damageNumber, activeBattlers[target].transform.position, activeBattlers[target].transform.rotation).SetDamage(damageToGive);
+        UpdateUIStats();
+        ValidateIsDead();
+    }
+
+    public void DealUltimateDamage(int target)
+    {
+        float atkPwr = activeBattlers[currentTurn].strength;
+        float defPwr = activeBattlers[target].defence;
+
+
+        float damageCalc = (atkPwr / defPwr) * Random.Range(.9f, 1.1f) * 2;
+        int damageToGive = Mathf.RoundToInt(damageCalc);
+        Debug.Log(activeBattlers[currentTurn].charName + " is dealing " + damageCalc + "(" + damageToGive + ") damage to " + activeBattlers[target].charName);
+        activeBattlers[target].currentHp -= damageToGive;
+        Instantiate(damageNumber, activeBattlers[target].transform.position, activeBattlers[target].transform.rotation).SetDamage(damageToGive);
+        UpdateUIStats();
+        ValidateIsDead();
+    }
+
+    public bool isPlayerTurn()
+    {
+        return currentTurn % 2 == 0 || currentTurn == 0;
+    }
+    public void UpdateUIStats()
+    {
+        playerHpText.text = activeBattlers[0].currentHp.ToString() + "/" + activeBattlers[0].maxHp.ToString();
+        playerMpText.text = activeBattlers[0].currentMp.ToString() + "/" + activeBattlers[0].maxMp.ToString();
+    }
+
+    public void ValidateIsDead()
+    {
+        if (activeBattlers[0].currentHp <= 0)
+        {
+            activeBattlers[0].EnemyFade();
+            Debug.Log("Você morreu");
+            StartCoroutine(EndBattleCo());
+        }
+        if(activeBattlers[1].currentHp <= 0)
+        {
+            Debug.Log("Você matou um inimigo");
+            activeBattlers[1].EnemyFade();
+            activeBattlers.RemoveAt(1);
+            currentEnemy++;
+        }
+        if (activeBattlers.Count == 1)
+        {
+            Debug.Log("Você venceu a batalha");
+            StartCoroutine(EndBattleCo());
+        }
+    }
+
 }
