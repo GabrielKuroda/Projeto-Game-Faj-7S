@@ -17,15 +17,16 @@ public class BattleStarter : MonoBehaviour
 
     void Update()
     {
-        if(inArea){
-            if(Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0){
+        if(inArea && Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0){
+            if(RPGController.Instance.canMove){
                 betweenBattleCounter -= Time.deltaTime;
             }
 
             if(betweenBattleCounter <= 0)
             {
                 betweenBattleCounter = Random.Range(timeBetweenBattles * .5f, timeBetweenBattles * 1.5f);
-                Debug.Log("Iniciou batalha");
+                RPGController.Instance.canMove = false;
+                StartCoroutine(StartBattleCo());
             }
         }
     }
@@ -44,5 +45,14 @@ public class BattleStarter : MonoBehaviour
         {
             inArea = false;
         }
+    }
+
+    public IEnumerator StartBattleCo()
+    {
+        UIFade.Instance.FadeToBlack();
+        int selectedBattle = Random.Range(0, potentialBattles.Length);
+        yield return new WaitForSeconds(1.5f);
+        BattleManager.Instance.BattleStart(potentialBattles[selectedBattle].enemies);
+        UIFade.Instance.FadeFromBlack();
     }
 }

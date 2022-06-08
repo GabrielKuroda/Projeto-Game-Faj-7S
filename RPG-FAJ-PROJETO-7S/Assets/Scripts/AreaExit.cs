@@ -11,7 +11,9 @@ public class AreaExit : MonoBehaviour
 
     public AreaEntrance theEntrance;
 
-    private bool shouldLoad; 
+    public float waitToLoad = 1f;
+
+    private bool shouldLoadAfterFade; 
 
     void Start()
     {
@@ -20,10 +22,16 @@ public class AreaExit : MonoBehaviour
 
     void Update()
     {
-        if (shouldLoad)
+        if (shouldLoadAfterFade)
         {
-            shouldLoad = false;
-            SceneManager.LoadScene(areaToLoad);
+            waitToLoad -= Time.deltaTime;
+
+            if (waitToLoad <= 0)
+            {
+                shouldLoadAfterFade = false;
+                RPGController.Instance.canMove = false;
+                SceneManager.LoadScene(areaToLoad);
+            }
         }
     }
 
@@ -31,8 +39,9 @@ public class AreaExit : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            shouldLoad = true;
-            RPGController.Instance.areaTransitionName = areaTransitionName;
+            shouldLoadAfterFade = true;
+            UIFade.Instance.FadeToBlack();
+            RPGController.Instance.areaTransitionName = areaTransitionName;    
         }
     }
 }
