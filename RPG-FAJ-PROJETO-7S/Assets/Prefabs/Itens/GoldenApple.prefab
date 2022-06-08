@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8666725799380386568}
   - component: {fileID: 7592710759368292687}
   - component: {fileID: 7298758593063942567}
+  - component: {fileID: 1668657242}
+  - component: {fileID: 1668657241}
   m_Layer: 0
   m_Name: GoldenApple
   m_TagString: Untagged
@@ -102,3 +104,31 @@ MonoBehaviour:
   amountToChange: 50
   affectHP: 1
   affectMP: 1
+--- !u!58 &1668657242
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8729591228829301096}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.007675525, y: 0.23987593}
+  serializedVersion: 2
+  m_Radius: 0.8
+--- !u!114 &1668657241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8729591228829301096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df91e33f9eba41e448a46fedd0c5b3ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

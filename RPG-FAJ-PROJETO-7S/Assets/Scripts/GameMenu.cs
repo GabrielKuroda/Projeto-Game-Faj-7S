@@ -16,7 +16,7 @@ public class GameMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Fire2")){
+        if(Input.GetButtonDown("Fire2") && !BattleManager.Instance.battleActive){
             if(theMenu.activeInHierarchy){
                 theMenu.SetActive(false);
                 RPGController.Instance.canMove = true;

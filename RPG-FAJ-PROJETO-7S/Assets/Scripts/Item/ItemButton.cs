@@ -24,6 +24,10 @@ public class ItemButton : MonoBehaviour
 
     public void Press() 
     {
-        
+        BattleManager.Instance.useItem(buttonValue);
+        BattleManager.Instance.UpdateUIStats();
+        BattleManager.Instance.closeItemMenu();
+
+        BattleManager.Instance.NextTurn();
     }
 }

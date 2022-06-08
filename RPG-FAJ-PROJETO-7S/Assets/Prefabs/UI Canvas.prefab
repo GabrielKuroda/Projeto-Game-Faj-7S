@@ -197,19 +197,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4933996209906298329}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 91272089664737007}
-        m_TargetAssemblyTypeName: ItemButton, Assembly-CSharp
-        m_MethodName: Press
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &91272089664737007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -422,19 +410,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1990250994609234225}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 537280194290049035}
-        m_TargetAssemblyTypeName: ItemButton, Assembly-CSharp
-        m_MethodName: Press
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &537280194290049035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -902,19 +878,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 972742212001850982}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3863986643634627938}
-        m_TargetAssemblyTypeName: ItemButton, Assembly-CSharp
-        m_MethodName: Press
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &3863986643634627938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1510,19 +1474,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1843876214228001581}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2183288451898016488}
-        m_TargetAssemblyTypeName: ItemButton, Assembly-CSharp
-        m_MethodName: Press
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2183288451898016488
 MonoBehaviour:
   m_ObjectHideFlags: 0
