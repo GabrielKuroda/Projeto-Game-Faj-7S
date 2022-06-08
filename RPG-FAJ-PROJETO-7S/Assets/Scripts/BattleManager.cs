@@ -191,7 +191,10 @@ public class BattleManager : IPersistentSingleton<BattleManager>
         UIFade.Instance.FadeFromBlack();
         currentTurn = 0;
         RPGController.Instance.canMove = true;
-        Destroy(activeBattlers[0].gameObject);
+        for (int i = 0; i < activeBattlers.Count; i++)
+        {
+            Destroy(activeBattlers[i].gameObject);
+        }
     }
 
     public IEnumerator EnemyAttack()

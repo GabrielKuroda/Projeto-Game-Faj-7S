@@ -6,7 +6,9 @@ public class EssencialsLoader : MonoBehaviour
 {
     public GameObject UICanvas;
     public GameObject player;
-    
+    public GameObject gameManager;
+    public GameObject battleManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +20,16 @@ public class EssencialsLoader : MonoBehaviour
         if (RPGController.Instance == null)
         {
             RPGController.Instance = Instantiate(player).GetComponent<RPGController>();
+        }
+
+        if (GameManager.Instance == null)
+        {
+            GameManager.Instance = Instantiate(gameManager).GetComponent<GameManager>();
+        }
+
+        if (BattleManager.Instance == null)
+        {
+            BattleManager.Instance = Instantiate(battleManager).GetComponent<BattleManager>();
         }
     }
 
