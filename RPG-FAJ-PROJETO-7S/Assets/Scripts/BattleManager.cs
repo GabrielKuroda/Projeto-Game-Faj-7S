@@ -6,17 +6,19 @@ using UnityEngine.UI;
 public class BattleManager : IPersistentSingleton<BattleManager>
 {
 
-    private bool battleActive;
+    public bool battleActive;
     private bool ableToAct;
     public bool turnWaiting;
+    public bool isItemMenuOpen;
 
     public GameObject battleScene;
     public GameObject uiButtonsHolder;
+    public GameObject itemMenu;
 
     public int currentTurn;
     public int chanceToFlee = 35;
     public int currentEnemy;
-
+    
     public Transform playerPositions;
     public Transform[] enemyPosition;
 
@@ -24,6 +26,8 @@ public class BattleManager : IPersistentSingleton<BattleManager>
     public BattleChar[] enemyPrefabs;
 
     public DamageNumber damageNumber;
+
+    public ItemButton[] itemButtons;
 
     public List<BattleChar> activeBattlers;
 
@@ -122,34 +126,40 @@ public class BattleManager : IPersistentSingleton<BattleManager>
 
     public void Flee()
     {
-        int fleeSuccess = Random.Range(0, 100);
-        if (fleeSuccess < chanceToFlee)
-        {
-            StartCoroutine(EndBattleCo());
-        }
-        else
-        {
-            Debug.Log("Não pode escapar da batalha");
-            currentTurn++;
+        if(!isItemMenuOpen) {
+            int fleeSuccess = Random.Range(0, 100);
+            if (fleeSuccess < chanceToFlee)
+            {
+                StartCoroutine(EndBattleCo());
+            }
+            else
+            {
+                Debug.Log("Nï¿½o pode escapar da batalha");
+                currentTurn++;
+            }
         }
     }
 
     public void Attack()
     {
-        ableToAct = false;
-        StartCoroutine(AttackAnimation());
+        if(!isItemMenuOpen) {
+            ableToAct = false;
+            StartCoroutine(AttackAnimation());
+        }
     }
 
     public void Ultimate()
     {
-        if(activeBattlers[0].currentMp >= 25)
-        {
-            ableToAct = false;
-            activeBattlers[0].currentMp -= 25;
-            StartCoroutine(UltimateAnimation());
-        }
-        else {
-            Debug.Log("Você não tem MP para utilizar a ultimate");
+        if(!isItemMenuOpen) {
+            if(activeBattlers[0].currentMp >= 25)
+            {
+                ableToAct = false;
+                activeBattlers[0].currentMp -= 25;
+                StartCoroutine(UltimateAnimation());
+            }
+            else {
+                Debug.Log("Vocï¿½ nï¿½o tem MP para utilizar a ultimate");
+            }
         }
     }
 
@@ -240,21 +250,71 @@ public class BattleManager : IPersistentSingleton<BattleManager>
         if (activeBattlers[0].currentHp <= 0)
         {
             activeBattlers[0].EnemyFade();
-            Debug.Log("Você morreu");
+            Debug.Log("Vocï¿½ morreu");
             StartCoroutine(EndBattleCo());
         }
         if(activeBattlers[1].currentHp <= 0)
         {
-            Debug.Log("Você matou um inimigo");
+            Debug.Log("Vocï¿½ matou um inimigo");
             activeBattlers[1].EnemyFade();
             activeBattlers.RemoveAt(1);
             currentEnemy++;
         }
         if (activeBattlers.Count == 1)
         {
-            Debug.Log("Você venceu a batalha");
+            Debug.Log("Vocï¿½ venceu a batalha");
             StartCoroutine(EndBattleCo());
         }
     }
 
+    public void showItens() 
+    {
+        for(int i = 0; i < itemButtons.Length; i++){
+            itemButtons[i].buttonValue = i;
+            if(GameManager.Instance.itensHeld[i] != ""){
+                itemButtons[i].buttonImage.gameObject.SetActive(true);
+                itemButtons[i].buttonImage.sprite = GameManager.Instance.GetItemDetails(GameManager.Instance.itensHeld[i]).itemSprite;
+                itemButtons[i].amountText.text = GameManager.Instance.numbOfItens[i].ToString();
+            }else{
+                itemButtons[i].buttonImage.gameObject.SetActive(false);
+                itemButtons[i].amountText.text = "";
+            }
+        }
+    }
+
+    public void openItemMenu() 
+    {
+        if(itemMenu.activeInHierarchy){
+                itemMenu.SetActive(false);
+                isItemMenuOpen = false;
+            }else{
+                itemMenu.SetActive(true);
+                isItemMenuOpen = true;
+                showItens();
+            }
+    }
+
+    public void closeItemMenu() 
+    {
+        itemMenu.SetActive(false);
+        isItemMenuOpen = false;
+    }
+
+    public void useItem(int itemValue) 
+    {
+        int value = GameManager.Instance.GetItemDetails(GameManager.Instance.itensHeld[itemValue]).amountToChange;
+
+        activeBattlers[0].currentHp += value;
+        activeBattlers[0].currentMp += value;
+
+        if(activeBattlers[0].currentHp > activeBattlers[0].maxHp){
+            activeBattlers[0].currentHp = activeBattlers[0].maxHp;
+        }
+
+        if(activeBattlers[0].currentMp > activeBattlers[0].maxMp){
+            activeBattlers[0].currentMp = activeBattlers[0].maxMp;
+        }
+
+        GameManager.Instance.RemoveItem(GameManager.Instance.GetItemDetails(GameManager.Instance.itensHeld[itemValue]).itemName);
+    }
 }
