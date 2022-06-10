@@ -43,3 +43,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a3da69ff5e3e9042957edc3deb33ca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itensHeld:
+  - Apple
+  - 
+  - 
+  - 
+  numbOfItens: 04000000000000000000000000000000
+  refereceItems:
+  - {fileID: 7298758593063942567, guid: dcdc3f4cce5ba1a46b24593c1e08baa8, type: 3}
