@@ -11,6 +11,8 @@ public class UIFade : IPersistentSingleton<UIFade>
     public bool shouldFadeToBlack;
     public bool shouldFadeFromBlack;
 
+    public bool fadding;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +24,7 @@ public class UIFade : IPersistentSingleton<UIFade>
     {
         if (shouldFadeToBlack)
         {
+            fadding = true;
             fadeScreen.color = new Color(fadeScreen.color.r, fadeScreen.color.g, fadeScreen.color.b, Mathf.MoveTowards(fadeScreen.color.a, 1f, fadeSpeed * Time.deltaTime));
 
             if (fadeScreen.color.a == 1f)
@@ -36,6 +39,7 @@ public class UIFade : IPersistentSingleton<UIFade>
 
             if (fadeScreen.color.a == 0f)
             {
+                fadding = false;
                 shouldFadeFromBlack = false;
             }
         }

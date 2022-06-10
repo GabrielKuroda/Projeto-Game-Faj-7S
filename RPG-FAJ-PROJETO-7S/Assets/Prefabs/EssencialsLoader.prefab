@@ -46,3 +46,7 @@ MonoBehaviour:
   UICanvas: {fileID: 8184518047224167636, guid: cba7b7bd851b78d4cabb738c97f856b8,
     type: 3}
   player: {fileID: 3926616534904496227, guid: a2c599c6a90e32c4882a37b554c7f3ad, type: 3}
+  gameManager: {fileID: 4054533721765133183, guid: c8dab68332bf0cf4289e4676745b21e2,
+    type: 3}
+  battleManager: {fileID: 800239877561326337, guid: 78d19339bc172884cb57b37d21ab67ab,
+    type: 3}
